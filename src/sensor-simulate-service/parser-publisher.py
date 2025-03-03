@@ -12,6 +12,8 @@ import argparse
 import os
 import paho.mqtt.client as mqtt
 
+import time
+
 MQTT_BROKER = os.getenv('MQTT_BROKER', 'localhost')
 MQTT_PORT = int(os.getenv('MQTT_PORT', 1883))
 MQTT_USERNAME = os.getenv('MQTT_USERNAME', None)
@@ -21,25 +23,31 @@ ROOT_CA = os.getenv('ROOT_CA', None)
 class SimulateSensorData:
     def __init__(self, file):
         self.file = file
-        self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, transport="tcp")
+        self.client = mqtt.Client(client_id="", clean_session=True, userdata=None, protocol=mqtt.MQTTv311, transport="tcp")
         if MQTT_USERNAME:
             self.client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
         if ROOT_CA:
             self.client.tls_set(ROOT_CA)
         self.client.on_connect = self.on_connect
         self.client.connect(MQTT_BROKER, MQTT_PORT, 60)
-        self.client.loop_start()
+        self.client.loop_forever()
+        self.publish_file(file)
+        return
 
     def on_connect(self, client, userdata, flags, rc):
         print("Connected with result code "+str(rc))
-        print(self.file)
-        with open(self.file) as f:
+        return
+
+    def publish_file(file):
+        with open(file) as f:
             for line in f:
                 parts = line.split(" ", 1)
+                print(parts)
                 if len(parts) == 2:
                     topic, message = parts
                     message = message.strip().lstrip("b'").rstrip("'")
-                    self.client.publish(topic, message)
+                    self.client.publish(topic=topic, payload=message)
+                    time.sleep(5)
         return
 
 def build_argparser():
@@ -57,4 +65,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -34,5 +34,4 @@ services:
     network_mode: "host"
     volumes:
       - ./sample-file.txt:/sample-file.txt
-    command: ./parser-publisher -f /sample-file.txt
     restart: always
