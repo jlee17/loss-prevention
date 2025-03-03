@@ -27,10 +27,12 @@ services:
     user: 2002:2001
 
   sensor-simulate:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: sensor-simulate
     hostname: sensor-simulate
-    image: sensor-simulate:latest
+    image: sensor-simulate:dev
     network_mode: "host"
     volumes:
       - ./sample-file.txt:/sample-file.txt

@@ -7,7 +7,7 @@
 .PHONY: build run down
 
 build:
-	docker build --build-arg HTTPS_PROXY=${HTTPS_PROXY} --build-arg HTTP_PROXY=${HTTP_PROXY} -f Dockerfile.python -t sensor_simulator:dev .
+	docker build --build-arg HTTPS_PROXY=${HTTPS_PROXY} --build-arg HTTP_PROXY=${HTTP_PROXY} -f Dockerfile -t sensor_simulator:dev .
 
 run:
 	docker compose up -d
