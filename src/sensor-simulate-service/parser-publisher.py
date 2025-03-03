@@ -30,15 +30,15 @@ class SimulateSensorData:
             self.client.tls_set(ROOT_CA)
         self.client.on_connect = self.on_connect
         self.client.connect(MQTT_BROKER, MQTT_PORT, 60)
-        self.client.loop_forever()
         self.publish_file(file)
+        self.client.loop_forever()
         return
 
     def on_connect(self, client, userdata, flags, rc):
         print("Connected with result code "+str(rc))
         return
 
-    def publish_file(file):
+    def publish_file(self, file):
         with open(file) as f:
             for line in f:
                 parts = line.split(" ", 1)
