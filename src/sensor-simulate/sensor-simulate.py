@@ -39,7 +39,6 @@ class SimulateSensorData:
         with open(file) as f:
             for line in f:
                 parts = line.split(" ", 1)
-
                 if len(parts) == 2:
                     topic, message = parts
                     message = message.strip().lstrip("b'").rstrip("'")
