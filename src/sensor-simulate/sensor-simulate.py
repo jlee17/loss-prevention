@@ -12,8 +12,6 @@ import argparse
 import os
 import paho.mqtt.client as mqtt
 
-import time
-
 MQTT_BROKER = os.getenv('MQTT_BROKER', 'localhost')
 MQTT_PORT = int(os.getenv('MQTT_PORT', 1883))
 MQTT_USERNAME = os.getenv('MQTT_USERNAME', None)
@@ -42,12 +40,11 @@ class SimulateSensorData:
         with open(file) as f:
             for line in f:
                 parts = line.split(" ", 1)
-                print(parts)
+
                 if len(parts) == 2:
                     topic, message = parts
                     message = message.strip().lstrip("b'").rstrip("'")
                     self.client.publish(topic=topic, payload=message)
-                    time.sleep(5)
         return
 
 def build_argparser():
